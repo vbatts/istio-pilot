@@ -10,6 +10,8 @@ go_library(
         "@com_github_gorilla_websocket//:go_default_library",
         "@org_golang_google_grpc//:go_default_library",
         "@org_golang_google_grpc//credentials:go_default_library",
+        "@in_gopkg_mgo_v2//:go_default_library",
+        "@in_gopkg_mgo_v2//bson:go_default_library",
     ],
 )
 

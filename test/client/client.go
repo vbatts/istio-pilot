@@ -28,6 +28,9 @@ import (
 	"strings"
 	"time"
 
+	mgo "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
+
 	"github.com/golang/sync/errgroup"
 	"github.com/gorilla/websocket"
 	"google.golang.org/grpc"
@@ -241,6 +244,32 @@ func main() {
 			HandshakeTimeout: timeout,
 		}
 		f = makeWebSocketRequest(client)
+	} else if strings.HasPrefix(url, "mongodb://") {
+		session, err := mgo.Dial(url)
+		if err != nil {
+			log.Fatalf("mongo failed: %v", err)
+		}
+		defer session.Close()
+
+		if flag.NArg() > 0 {
+			// insert into a iteration collection
+			iteration := session.DB("test").C("iteration")
+			if err := iteration.Insert(bson.M{"iteration": strings.Join(flag.Args(), " ")}); err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			// this is relying on the docker.io/istio/examples-bookinfo-mongodb image
+			ratings := session.DB("test").C("ratings")
+			result := []map[string]interface{}{}
+			if err := ratings.Find(nil).All(&result); err != nil {
+				log.Fatal(err)
+			}
+			if len(result) == 0 {
+				log.Fatal("mongodb expected to find ratings, but didn't find any")
+			}
+		}
+
+		log.Fatalf("mongodb is not implemented yet [%q]", strings.Join(os.Args, " "))
 	} else {
 		log.Fatalf("Unrecognized protocol %q", url)
 	}

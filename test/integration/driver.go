@@ -129,6 +129,7 @@ func main() {
 	params.Ingress = true
 	params.Egress = true
 	params.Zipkin = true
+	params.Mongo = true
 
 	if len(params.Namespace) != 0 && authmode == "both" {
 		glog.Infof("When namespace(=%s) is specified, auth mode(=%s) must be one of enable or disable.",
@@ -200,6 +201,7 @@ func runTests(envs ...infra) {
 			&egressRules{infra: &istio},
 			&routing{infra: &istio},
 			&zipkin{infra: &istio},
+			&mongo{infra: &istio},
 		}
 
 		for _, test := range tests {

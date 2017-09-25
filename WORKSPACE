@@ -464,6 +464,12 @@ go_repository(
 # This SHA is obtained from istio/api
 ISTIO_API = "ce599cdd0517de3e0275f72aac01b7a8022091cf"
 
+go_repository(
+    name = "in_gopkg_mgo_v2",
+    commit = "3f83fa5005286a7fe593b055f0d7771a7dce4655",
+    importpath = "gopkg.in/mgo.v2",
+)
+
 new_git_repository(
     name = "io_istio_api",
     build_file_content = """

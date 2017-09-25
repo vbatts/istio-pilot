@@ -65,6 +65,9 @@ type infra struct { // nolint: aligncheck
 	Zipkin    bool
 	DebugPort int
 
+	// switch to test mongodb filter
+	Mongo bool
+
 	// check proxy logs
 	checkLogs bool
 
@@ -250,6 +253,12 @@ func (infra *infra) setup() error {
 		}
 	}
 
+	if infra.Mongo {
+		if err := deploy("mongo.yaml", infra.IstioNamespace); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -273,8 +282,10 @@ func (infra *infra) deployApps() error {
 	return nil
 }
 
-func (infra *infra) deployApp(deployment, svcName string, port1, port2, port3, port4, port5, port6 int,
-	version string, injectProxy bool) error {
+func (infra *infra) deployApp(deployment, svcName string,
+	port1, port2, port3, port4, port5, port6 int,
+	version string,
+	injectProxy bool) error {
 	// Eureka does not support management ports
 	healthPort := "true"
 	if platform.ServiceRegistry(infra.Registry) == platform.EurekaRegistry {

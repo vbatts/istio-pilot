@@ -19,9 +19,9 @@ import:
   subpackages:
   - errgroup
 - package: github.com/googleapis/googleapis
+  repo: git@github.com:costinm/googleapis.git
   subpackages:
   - google/rpc
-  repo: git@github.com:costinm/googleapis.git
 - package: github.com/hashicorp/go-multierror
 - package: github.com/howeyc/fsnotify
 - package: github.com/pmezard/go-difflib
@@ -75,6 +75,7 @@ import:
   subpackages:
   - core/pkg/ingress/status
   - core/pkg/ingress/store
+- package: gopkg.in/mgo.v2
 testImport:
 - package: github.com/golang/mock
   subpackages:
